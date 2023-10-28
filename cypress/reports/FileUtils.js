@@ -1,6 +1,23 @@
 const fs = require('fs');
 
+const months = {
+    "01": "January",
+    "02": "February",
+    "03": "March",
+    "04": "April",
+    "05": "May",
+    "06": "June",
+    "07": "July",
+    "08": "August",
+    "09": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December" 
+}
+
 class FileUtils{
+
+       
 
 async createJsonFile(jsonArray){
 
@@ -16,6 +33,34 @@ if(!await fs.existsSync('cypress/reports/jsons')){
 await fs.writeFileSync("cypress/reports/jsons/"+fileName+'.json',JSON.stringify(jsonArray, null, 2), 'utf8');   
 
 
+}
+
+
+async changeDateFormat(rawDateTime){
+
+    let rawDate = rawDateTime.toString().split('T');
+    rawDate = rawDate[0].toString().split('-').reverse();
+    let monthNum = rawDate[1].toString();
+    for(const month in months){
+  
+        if(monthNum === month){
+
+            return rawDate[0] + ' ' + months[monthNum] + ' ' + rawDate[2];
+        }
+       
+
+    } 
+
+
+}
+
+
+
+async changeTimeFormat(){
+    let time = new Date().toLocaleTimeString();
+    let runEndTime = time.replaceAll(':','_');
+    console.log(runEndTime);
+   return runEndTime;
 }
 
 async getFilesFromJsonFolder(filePath){
@@ -54,4 +99,3 @@ async extractSpecFileName(specFilePath){
 }
 
 module.exports = FileUtils;
-

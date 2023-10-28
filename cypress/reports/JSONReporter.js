@@ -52,7 +52,9 @@ const {
           if (this.currentSuite) {
             let temp = {};
             temp[test.fullTitle()] = 'fail';
-            temp['error'] = err.message;
+            let error = {};
+            error['message'] = err.message;
+            temp['error'] = error;
             this.currentSuite.testcases.push(temp);
             this.failed++;
           }
@@ -82,4 +84,3 @@ const {
   }
   
   module.exports = JSONReporter;
-  

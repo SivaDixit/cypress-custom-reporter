@@ -1,6 +1,10 @@
+//Cypress-runner
+
 const cypress = require('cypress');
 const FileUtils = require('./cypress/reports/FileUtils');
+const HtmlBuilder = require('./cypress/reports/HtmlBuilder');
 const fileutils = new FileUtils();
+const htmlBuilder = new HtmlBuilder();
 const jsonDirPath = "cypress/reports/jsons";
 let results = [];
 
@@ -18,6 +22,7 @@ async function runTests(){
     await console.log(runResults.totalPending);
     await console.log(runResults.totalSkipped);
     await console.log(runResults.endedTestsAt);
+
     const files = await fileutils.getFilesFromJsonFolder(jsonDirPath);
     console.log(files);
     for(let i=0;i<files.length;i++){
@@ -25,9 +30,10 @@ async function runTests(){
       await results.push(resultData);
 
     }
+    await htmlBuilder.buildHtml(results,runResults);
     await console.log(JSON.stringify(results));
     await fileutils.deleteFilesFromFolder(jsonDirPath,files);
-    //await fileutils.deleteJsonFolder(jsonDirPath);
+    
 
 }
 
